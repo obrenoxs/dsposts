@@ -39,6 +39,12 @@ public class UserService {
         user = userRepository.save(user);
         return new UserDTO(user);
     }
+
+    public void delete(String id) {
+        User user = getEntityById(id);
+        userRepository.delete(user);
+    }
+
     private void copyDtoToEntity(UserDTO userDTO, User user) {
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
