@@ -22,8 +22,7 @@ public class UserService {
     }
 
     public UserDTO findById(String id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Objeto não encontrado"));
+        User user = getEntityById(id);
         return new UserDTO(user);
     }
 
@@ -34,8 +33,20 @@ public class UserService {
         return new UserDTO(user);
     }
 
+    public UserDTO update(String id, UserDTO userDTO) {
+        User user = getEntityById(id);
+        copyDtoToEntity(userDTO, user);
+        user = userRepository.save(user);
+        return new UserDTO(user);
+    }
     private void copyDtoToEntity(UserDTO userDTO, User user) {
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
+    }
+
+    private User getEntityById(String id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Objeto não encontrado"));
+        return user;
     }
 }
